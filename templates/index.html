@@ -6,7 +6,8 @@
 
 	<body>
 		<div id="chat"></div>
-		<input id="chat-input" type="text"> <button id="btn_1">Send Message</button>
+		<input id="chat-input" type="text">
+		<button id="btn_1">Send Message</button>
 		<button id="btn_2">Connect</button>
 		
 		<script>
@@ -20,7 +21,7 @@
 				socket.connect();
 			}
 
-			var btn_1 = document.getElementbyId('btn_1');
+			var btn_1 = document.getElementById('btn_1');
 			btn_1.onclick = ()=>{
 				sendMessage();
 			}
