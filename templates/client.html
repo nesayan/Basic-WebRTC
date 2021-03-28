@@ -51,7 +51,6 @@
         });
 
         socket.on('disconnect', function () {
-            closeLocalStream();
             socket.disconnect();
             console.log("Disconnected to server!");
         });
@@ -70,9 +69,6 @@
             if(localStream == null)
                 console.log("Already closed");
             else {
-                closeLocalStream();
-                console.log("Local stream closed");
-                pc.close();
                 remoteStreamElement.srcObject = null;
                 console.log("Disconnected from peer");
                 location.reload();
@@ -95,17 +91,6 @@
                 console.error('Stream not found: ', error);
             });
         }
-
-        let closeLocalStream = () => {
-            const stream = localStreamElement.srcObject;
-            const tracks = stream.getTracks();
-            tracks.forEach(track => {
-                track.stop();
-            });
-            localStreamElement.srcObject = null;
-            localStream = null;
-        }
-
     });
     </script>
     
