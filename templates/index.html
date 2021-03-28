@@ -1,13 +1,27 @@
-  
-<div id="chat"></div>
-<input id="chat-input" type="text"> <button onclick="sendMessage()">Send Message</button>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-<script>
-	socket = io()
-	function sendMessage () {
-		socket.emit("message",document.getElementById("chat-input").value)
-	}
-	socket.on("new_message",(data)=>{
-		document.getElementById("chat").innerHTML+="<br>"+data;
-	})
-</script>
+<html>
+	<head>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js" integrity="sha512-aC5ZfKOuGRUiJCv+E/EIWsj49E02BQpuLQbixZe+16Lm1R6AepHZA1xvY92XBQNNbwQoqG4DXCGxwoxBFb5Q1A==" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+		<div id="chat"></div>
+		<input id="chat-input" type="text"> <button onclick="sendMessage()">Send Message</button>
+		
+		<script>
+			let socket = io();
+
+			socket.on("connect",()=>{
+				console.log("Connected");
+			})
+
+			function sendMessage () {
+				console.log('sending message');
+				socket.emit("data",document.getElementById("chat-input").value);
+			}
+			socket.on("data",(data)=>{
+				console.log('recieve message');
+				document.getElementById("chat").innerHTML+="<br>"+data;
+			})
+		</script>
+	</body>
+</html>

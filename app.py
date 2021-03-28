@@ -9,9 +9,9 @@ socketio = SocketIO(app)
 def index():
     return render_template('index.html')
 
-@socketio.on("message")
+@socketio.on("data")
 def handleMessage(data):
-    emit("new_message",data,broadcast=True)
+    emit("data",data,broadcast=True)
     
 if __name__ == "__main__":
-    socketio.run(app, debug=True, host='0.0.0.0', port=5004)
+    socketio.run(app)
