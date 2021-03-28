@@ -5,7 +5,7 @@ import os
 ROOM = "room"
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socket = SocketIO(app)
 
 clients = []
 
