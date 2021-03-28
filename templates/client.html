@@ -27,6 +27,8 @@
     <script>
         $(document).ready(function() {
         var socket = io({autoConnect: false});
+        console.log('Connecting to server');
+        socket.connect();
         //console.log(location.protocol+'//'+document.domain+':'+location.port);
         let localStreamElement = document.getElementById("localStream");
         let remoteStreamElement = document.getElementById('remoteStream');
@@ -79,20 +81,7 @@
             btn_close.disabled = true;
         }
 
-        socket.on('ready', () => {
-            console.log("Ready");
-            createPeerConnection();
-            sendOffer();
-        });
-
-        socket.on('data', (data) => {
-            console.log('Data received: ',data);
-            handleSignalingData(data);
-        });
-
-        let sendData = (data) => {
-            socket.emit('data', data);
-        }
+        
 
         let getLocalStream = () => {
             navigator.mediaDevices.getUserMedia({ video: true })
@@ -101,91 +90,10 @@
                 localStreamElement.srcObject = stream;
                 localStream = stream;
                 // Connect after making sure that local stream is availble
-                console.log('Connecting to server');
-                socket.connect();
             })
             .catch(error => {
                 console.error('Stream not found: ', error);
             });
-        }
-
-        let createPeerConnection = () => {
-            try
-            {
-                pc = new RTCPeerConnection(PC_CONFIG);
-                pc.onicecandidate = onIceCandidate;
-                pc.onaddstream = onAddStream;
-                pc.addStream(localStream);
-                pc.oniceconnectionstatechange = stateHandler;
-                console.log('PeerConnection created');
-            } catch (error) {
-                console.error('PeerConnection failed: ', error);
-            }
-        }
-
-        let onIceCandidate = (event) => {
-            if (event.candidate) {
-                console.log('Sending ICE candidate');
-                sendData({
-                type: 'candidate',
-                candidate: event.candidate
-                });
-            }
-        }
-
-        let onAddStream = (event) => {
-            console.log('Add stream', event.stream);
-            remoteStreamElement.srcObject = event.stream;
-        }
-
-        let sendOffer = () => {
-            console.log('Send offer');
-            pc.createOffer().then(
-                setAndSendLocalDescription,
-                (error) => { console.error('Send offer failed: ', error); }
-            );
-        }
-
-        let sendAnswer = () => {
-            console.log('Send answer');
-            pc.createAnswer().then(
-                setAndSendLocalDescription,
-                (error) => { console.error('Send answer failed: ', error); }
-            );
-        }
-
-        let setAndSendLocalDescription = (sessionDescription) => {
-        pc.setLocalDescription(sessionDescription);
-        console.log('Local description set');
-        sendData(sessionDescription);
-        }
-
-        let stateHandler = () => {
-            if(pc.iceConnectionState == 'disconnected')
-            {
-                console.log('Peer disconnected');
-                pc.close();
-                closeLocalStream();
-                remoteStreamElement.srcObject = null;
-                location.reload();
-            }
-        }
-
-        let handleSignalingData = (data) => {
-            switch (data.type)
-            {
-                case 'offer':
-                    createPeerConnection();
-                    pc.setRemoteDescription(new RTCSessionDescription(data));
-                    sendAnswer();
-                    break;
-                case 'answer':
-                    pc.setRemoteDescription(new RTCSessionDescription(data));
-                    break;
-                case 'candidate':
-                    pc.addIceCandidate(new RTCIceCandidate(data.candidate));
-                    break;
-            }
         }
 
         let closeLocalStream = () => {
