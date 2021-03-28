@@ -53,43 +53,7 @@
             socket.disconnect();
             console.log("Disconnected to server!");
         });
-
-        btn_start.onclick = function() {
-            if(localStream != null)
-                console.log("Already started");
-            else {
-                getLocalStream();
-            }
-            btn_start.disabled = true;
-            btn_close.disabled = false;
-        }
-
-        btn_close.onclick = function() {
-            if(localStream == null)
-                console.log("Already closed");
-            else {
-                remoteStreamElement.srcObject = null;
-                console.log("Disconnected from peer");
-                location.reload();
-            }
-            btn_start.disabled = false;
-            btn_close.disabled = true;
-        }
-
         
-
-        let getLocalStream = () => {
-            navigator.mediaDevices.getUserMedia({ video: true })
-            .then((stream) => {
-                console.log('Stream found', stream);
-                localStreamElement.srcObject = stream;
-                localStream = stream;
-                // Connect after making sure that local stream is availble
-            })
-            .catch(error => {
-                console.error('Stream not found: ', error);
-            });
-        }
     });
     </script>
     
