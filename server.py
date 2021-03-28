@@ -8,7 +8,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('client.html')
 
 @socketio.on("message")
 def handleMessage(data):
