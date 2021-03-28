@@ -27,7 +27,7 @@
     <script>
         $(document).ready(function() {
         var socket = io(location.protocol+'//'+document.domain+':'+location.port, {autoConnect: false});
-
+        console.log(location.protocol+'//'+document.domain+':'+location.port);
         let localStreamElement = document.getElementById("localStream");
         let remoteStreamElement = document.getElementById('remoteStream');
         var btn_start = document.getElementById("btn_start");
