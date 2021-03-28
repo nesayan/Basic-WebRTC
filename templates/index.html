@@ -6,13 +6,19 @@
 
 	<body>
 		<div id="chat"></div>
-		<input id="chat-input" type="text"> <button onclick="sendMessage()">Send Message</button>
+		<input id="chat-input" type="text"> <button id="btn_1">Send Message</button>
+		<button id="btn_2">Connect</button>
 		
 		<script>
 		$(document).ready(() => {
 
 		
-			let socket = io();
+			let socket = io({autoConnect: false});
+
+			var btn_2 = document.getElementById('btn_2');
+			btn_2.onclick = ()=>{
+				socket.connect();
+			}
 
 			socket.on("connect",()=>{
 				console.log("Connected");
@@ -22,6 +28,7 @@
 				console.log('sending message');
 				socket.emit("data",document.getElementById("chat-input").value);
 			}
+			
 			socket.on("data",(data)=>{
 				console.log('recieve message');
 				document.getElementById("chat").innerHTML+="<br>"+data;
