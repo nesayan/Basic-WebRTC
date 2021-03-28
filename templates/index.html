@@ -16,7 +16,7 @@
 		$(document).ready(() => {
 
 		
-			let socket = io();
+			let socket = io({autoConnect:false});
 
 			var btn_2 = document.getElementById('btn_2');
 			btn_2.onclick = ()=>{
