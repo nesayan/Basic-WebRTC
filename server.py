@@ -1,10 +1,9 @@
-from flask import Flask, request, render_template
-from flask_socketio import SocketIO, emit, join_room, leave_room
-
-clients = []
+from flask import Flask, render_template, make_response, redirect
+from flask_socketio import SocketIO, send, emit
+import os
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app)
 
 @app.route('/')
 def index():
