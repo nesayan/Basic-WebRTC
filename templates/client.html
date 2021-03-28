@@ -101,6 +101,7 @@
                 localStreamElement.srcObject = stream;
                 localStream = stream;
                 // Connect after making sure that local stream is availble
+                console.log('Connecting to server');
                 socket.connect();
             })
             .catch(error => {
